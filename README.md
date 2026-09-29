@@ -1,3 +1,5 @@
+<img src="assets/logo-sm.png" alt="NuGuard logo" width="40" align="left">
+
 # NuGuard Skills and Claude Code Plugin
 
 Skills and a Claude Code plugin for the open source [NuGuard Python package](https://github.com/NuGuardAI/nuguard). They help an agent generate and interpret an AI-SBOM, run NuGuard's static analysis, and use behavior or red-team testing against an authorized live target.

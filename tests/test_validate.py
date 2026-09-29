@@ -14,6 +14,11 @@ class ValidateTests(unittest.TestCase):
             text = (ROOT / "commands" / f"nuguard-{name}.md").read_text(encoding="utf-8")
             self.assertIn("--no-llm", text, name)
 
+    def test_readme_logo_exists(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        logo = re.search(r'<img src="([^"]+)"', readme)
+        self.assertTrue(logo and (ROOT / logo.group(1)).is_file())
+
     def test_referenced_commands_and_skills_exist(self):
         commands = {p.stem for p in (ROOT / "commands").glob("*.md")}
         skills = {p.name for p in (ROOT / "skills").iterdir()}
