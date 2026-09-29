@@ -1,0 +1,14 @@
+{
+  "name": "nuguard",
+  "version": "0.9.10",
+  "description": "AI application security with the NuGuard CLI: AI-SBOM, static analysis, behavior validation, and red-team testing.",
+  "author": {
+    "name": "NuGuard",
+    "email": "info@nuguard.ai",
+    "url": "https://nuguard.ai"
+  },
+  "homepage": "https://github.com/NuGuardAI/nuguard-skills",
+  "repository": "https://github.com/NuGuardAI/nuguard-skills",
+  "license": "Apache-2.0",
+  "keywords": ["ai-security", "sbom", "red-team", "llm", "ai-agents"]
+}

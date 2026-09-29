@@ -21,7 +21,7 @@ class InstallTests(unittest.TestCase):
     def test_conflict_stops_all_copies_without_overwrite(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
-            conflict = project / DESTINATIONS["claude"] / "nuguard-aibom"
+            conflict = project / DESTINATIONS["claude"] / "ai-security-review"
             conflict.mkdir(parents=True)
             (conflict / "SKILL.md").write_text("local changes", encoding="utf-8")
             self.assertEqual(install(project, list(DESTINATIONS)), 1)

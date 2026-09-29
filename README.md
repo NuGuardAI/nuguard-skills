@@ -1,37 +1,36 @@
-# NuGuard Skills
+# NuGuard Skills and Claude Code Plugin
 
-Open source, reusable agent skills for building and reviewing AI security software with NuGuard conventions. The same `SKILL.md` files work with Claude Code, Codex, and GitHub Copilot. They are guidance for coding agents, not a security scanner or a substitute for server-side controls.
+Skills and a Claude Code plugin for the open source [NuGuard Python package](https://github.com/NuGuardAI/nuguard). They help an agent generate and interpret an AI-SBOM, run NuGuard's static analysis, and use behavior or red-team testing against an authorized live target.
 
-## Skills
+This repository adapts the [package plugin on `develop`](https://github.com/NuGuardAI/nuguard/tree/develop/plugin). The NuGuard package and its current CLI help, schema, and configuration remain authoritative if a command or field changes. The plugin expects the `nuguard` CLI to be installed separately; it does not bundle the Python package.
 
-| Skill | Use it for |
-| --- | --- |
-| `nuguard-aibom` | AI bill of materials extraction, graph identity, evidence, and exports |
-| `nuguard-tenant-security` | Tenant isolation, authorization, hostile inputs, and sensitive data |
-| `nuguard-api-contracts` | Changes to service APIs and their clients or tests |
-| `nuguard-frontend` | NuGuard React, TypeScript, validation, and error handling |
-| `nuguard-code-review` | Evidence-based review of NuGuard changes |
+## Claude Code plugin
 
-Each skill is independently selectable. Read its frontmatter to see when it applies. The skills use repository files as the source of truth when a local NuGuard implementation differs from an example here.
+In Claude Code:
 
-## Install in a project
-
-Clone this repository, then run from the clone:
-
-```bash
-python3 scripts/install.py --project /path/to/your-project --tool all
+```text
+/plugin marketplace add NuGuardAI/nuguard-skills
+/plugin install nuguard
 ```
 
-The installer copies the skills to `.claude/skills/`, `.agents/skills/`, and `.github/skills/` for Claude Code, Codex, and GitHub Copilot respectively. Select one tool with `--tool claude`, `--tool codex`, or `--tool copilot`. It does not overwrite existing skills; a conflicting skill stops installation and leaves that skill untouched. Commit the installed skills in your project if you want the team to share them.
+Or use `claude plugin marketplace add NuGuardAI/nuguard-skills` and `claude plugin install nuguard` in a terminal. Install the package with `pipx install nuguard` or another Python environment of your choice, then check `nuguard --help`.
 
-For a personal installation, copy the desired folders from `skills/` into `~/.claude/skills/` or `~/.codex/skills/`. Copilot skills belong in a repository's `.github/skills/` directory.
+The plugin supplies two skills, the `/nuguard-config`, `/nuguard-init`, `/nuguard-sbom`, `/nuguard-analyze`, `/nuguard-scan`, `/nuguard-behavior`, and `/nuguard-redteam` commands, and a `security-auditor` agent. It does not store credentials. Configure the CLI with environment variables and `${ENV_VAR}` references in `nuguard.yaml`.
 
-## Use
+## Skills for Claude Code, Codex, and GitHub Copilot
 
-Ask your agent to use a skill by name, for example, “Use `nuguard-aibom` to review this extraction change,” or let the agent select it from its description. NuGuard repository instructions, actual API schemas, and current code take precedence over examples in this package.
+The shared skills are [`ai-security-review`](skills/ai-security-review/SKILL.md) for NuGuard scan and findings workflows and [`sbom-analysis`](skills/sbom-analysis/SKILL.md) for interpreting an AI-SBOM. To install them in an existing project, clone this repository and run:
 
-## Contributing
+```bash
+python3 scripts/install.py --project /path/to/project --tool all
+```
 
-Keep each skill focused on decisions that require NuGuard context. Add a clear trigger in the frontmatter, avoid secrets and customer data, and verify examples against the current public code before proposing a change. Run `python3 scripts/validate.py` and `python3 -m unittest discover -s tests` before opening a pull request.
+The installer copies the skills into `.claude/skills/`, `.agents/skills/`, and `.github/skills/`. Use `--tool claude`, `--tool codex`, or `--tool copilot` to select one. It refuses to overwrite an existing modified skill. Claude Code users who install the plugin do not need a second copy of its skills in the project.
 
-Licensed under the [MIT License](LICENSE).
+## Security and scope
+
+Static scans may read repository content and query vulnerability data sources. Behavior and red-team commands send traffic to a live application; confirm its URL and test identity first. The plugin defaults red-team runs to non-destructive scenarios. Review reports before sharing them because they may contain source paths, findings, or response excerpts. Never put tokens or passwords in command arguments, tracked configuration, or chat output.
+
+## Develop
+
+Run `python3 scripts/validate.py` and `python3 -m unittest discover -s tests`. Update examples against the [NuGuard CLI source](https://github.com/NuGuardAI/nuguard/tree/develop/nuguard/cli/commands) when the package changes. The files derived from the NuGuard package plugin and this repository are licensed under [Apache 2.0](LICENSE).

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate package structure and required skill metadata without dependencies."""
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -37,6 +38,28 @@ def validate() -> list[str]:
             errors.append(f"{file}: unfinished placeholder")
     if not any(SKILLS.iterdir()):
         errors.append("No skills found")
+    plugin_file = ROOT / ".claude-plugin/plugin.json"
+    marketplace_file = ROOT / ".claude-plugin/marketplace.json"
+    try:
+        plugin = json.loads(plugin_file.read_text(encoding="utf-8"))
+        marketplace = json.loads(marketplace_file.read_text(encoding="utf-8"))
+        entry = next(
+            item for item in marketplace["plugins"] if item["name"] == plugin["name"]
+        )
+        if entry["source"] != "./":
+            errors.append(f"{marketplace_file}: plugin source must be repository root")
+        if entry["version"] != plugin["version"]:
+            errors.append("Marketplace and plugin versions differ")
+    except (OSError, ValueError, KeyError, StopIteration, TypeError) as exc:
+        errors.append(f"Claude plugin manifest is invalid: {exc}")
+    for folder in (ROOT / "commands", ROOT / "agents"):
+        if not folder.is_dir() or not list(folder.glob("*.md")):
+            errors.append(f"{folder}: missing Markdown entries")
+            continue
+        for file in folder.glob("*.md"):
+            content = file.read_text(encoding="utf-8")
+            if not re.match(r"\A---\n.*?^name: .+\n.*?^description: .+\n.*?^---\n", content, re.S | re.M):
+                errors.append(f"{file}: missing name or description frontmatter")
     return errors
 
 
