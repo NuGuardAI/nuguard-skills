@@ -1,7 +1,7 @@
 {
   "name": "nuguard",
-  "version": "0.9.10",
-  "description": "AI application security with the NuGuard CLI: AI-SBOM, static analysis, behavior validation, and red-team testing.",
+  "version": "0.9.11",
+  "description": "AI application security with the NuGuard CLI: AI-SBOM, static analysis, behavior validation, and red-team testing, using Claude Code's model for the LLM steps.",
   "author": {
     "name": "NuGuard",
     "email": "info@nuguard.ai",
