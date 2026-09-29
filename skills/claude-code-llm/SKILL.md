@@ -11,6 +11,8 @@ The `nuguard` CLI does its LLM work through LiteLLM and a provider key. In Claud
 
 - Leave `llm.api_key` unset in `nuguard.yaml`, and do not add `--llm`. Pass `--no-llm` wherever the command accepts it (`sbom generate`, `analyze`, `policy draft`, `init`).
 - `nuguard scan` enables its LLM pass only with `--llm`, and `nuguard behavior` has no LLM flag; it uses an LLM only when a key is configured. If the user's shell exports `LITELLM_API_KEY`, `GEMINI_API_KEY`, `OPENAI_API_KEY`, or `ANTHROPIC_API_KEY` and they want Claude Code's model only, run the command as `env -u LITELLM_API_KEY -u GEMINI_API_KEY -u OPENAI_API_KEY -u ANTHROPIC_API_KEY nuguard ...`.
+- Read the `llm:` block of the `nuguard.yaml` you will pass. If it sets `api_key` (often as `${SOME_ENV_VAR}`, which the `env -u` list above does not cover), the CLI will call that provider. When the user wants Claude Code's model only, write a copy of the config without the `llm:` block (for example `.nuguard/claude-code.yaml`, and add `.nuguard/` to `.gitignore` if the user agrees) and pass it with `--config`. Do not edit their `nuguard.yaml` unasked.
+- After a run, check `token_usage.llm_model` in the JSON report. It should be `null` with 0 tokens; if not, tell the user which provider the CLI used.
 - If the user chooses their own provider key instead, use it as they configured it. That is their choice; do not override it.
 - Never read, print, or copy a key value. Refer to variable names only.
 
