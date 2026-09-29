@@ -9,8 +9,8 @@
     {
       "name": "nuguard",
       "source": "./",
-      "description": "AI application security workflows for the NuGuard Python package.",
-      "version": "0.9.10",
+      "description": "AI application security workflows for the NuGuard Python package, using Claude Code's model for the LLM steps.",
+      "version": "0.9.11",
       "category": "security",
       "tags": ["ai-security", "sbom", "red-team", "llm"]
     }
