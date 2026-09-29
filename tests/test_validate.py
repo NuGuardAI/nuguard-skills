@@ -1,3 +1,4 @@
+import json
 import re
 import unittest
 from pathlib import Path
@@ -13,6 +14,10 @@ class ValidateTests(unittest.TestCase):
         for name in ("sbom", "analyze"):
             text = (ROOT / "commands" / f"nuguard-{name}.md").read_text(encoding="utf-8")
             self.assertIn("--no-llm", text, name)
+
+    def test_manifest_icon_exists(self):
+        icon = json.loads((ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8"))["icon"]
+        self.assertTrue((ROOT / icon).is_file())
 
     def test_readme_logo_exists(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
