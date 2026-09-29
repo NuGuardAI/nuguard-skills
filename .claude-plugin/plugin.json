@@ -10,5 +10,6 @@
   "homepage": "https://github.com/NuGuardAI/nuguard-skills",
   "repository": "https://github.com/NuGuardAI/nuguard-skills",
   "license": "Apache-2.0",
+  "icon": "./assets/logo-sm.png",
   "keywords": ["ai-security", "sbom", "red-team", "llm", "ai-agents"]
 }
